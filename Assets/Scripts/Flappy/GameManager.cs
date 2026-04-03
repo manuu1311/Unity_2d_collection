@@ -2,6 +2,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,12 +12,16 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverImg;
     public Bird_script bird;
     public SoundManager soundManager;
+    public GameObject homeButton;
+    public ParticleSystem explosion;
+    public Image healthbar;
 
     private void Awake()
     {
         Application.targetFrameRate=60;
         playButton.SetActive(true);
         gameOverImg.SetActive(false);
+        homeButton.SetActive(false);
         Pause();
     }
 
@@ -25,25 +30,36 @@ public class GameManager : MonoBehaviour
         Score=0;
         score.text=Score.ToString();
 
+        bird.gameObject.SetActive(true);
         gameOverImg.SetActive(false);
         playButton.SetActive(false);
+        homeButton.SetActive(false);
         Time.timeScale=1f;
         bird.enabled=true;
-        Vector3 pos = bird.transform.position;
-        pos.y = -1.5f;
-        bird.transform.position = pos;
-        bird.rigidBody.linearVelocity = new Vector2(0, 0);
+        bird.ResetBird();
         obj_mover[] env= FindObjectsByType<obj_mover>();
         for(int i = 0; i < env.Length; i++)
         {
             Destroy(env[i].gameObject);
         }
+        CloudFade[] fades=  FindObjectsByType<CloudFade>();
+        for(int i = 0; i < fades.Length; i++)
+        {
+            Destroy(fades[i].gameObject);
+        }
         soundManager.PlayMusic();
     }
-    private void Pause(){
+    public void Pause(){
         soundManager.StopMusic();
         Time.timeScale=0f;
         bird.enabled=false;
+        homeButton.SetActive(false);
+    }
+
+    public void Resume() {
+        soundManager.ResumeMusic();
+        Time.timeScale=1f;
+        bird.enabled=true;
     }
     public void IncreaseScore(float val)
     {
@@ -53,18 +69,31 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverImg.SetActive(true);
-        playButton.SetActive(true);
         Pause();
-    }
-    void Start()
-    {
-        
+        soundManager.GameOver();
+        StartCoroutine(GameOverSequence());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator GameOverSequence()
     {
-        
+        yield return new WaitForSecondsRealtime(0.8f);
+        bird.gameObject.SetActive(false);
+        ExplodePlayer();
+        soundManager.PlayExplosion();
+
+        yield return new WaitForSecondsRealtime(2f);
+        gameOverImg.SetActive(true);
+        playButton.SetActive(true);
+        homeButton.SetActive(true);
+    }
+
+    private void ExplodePlayer(){
+        Vector3 pos = bird.transform.position;
+        explosion.transform.position=pos;
+        explosion.Play();
+    }
+
+    void Update() {
+        healthbar.fillAmount=bird.GetHealth();
     }
 }

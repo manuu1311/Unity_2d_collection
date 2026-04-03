@@ -6,8 +6,11 @@ public class SoundManager : MonoBehaviour
     public AudioClip jumping;
     public AudioClip starSound1;
     public AudioClip starSound2;
+    public AudioClip gameover;
+    public AudioClip explosion;
     public AudioSource sfx;
     public AudioSource music;
+
     
 
     public void StarPickup1() {
@@ -19,14 +22,26 @@ public class SoundManager : MonoBehaviour
     }
 
     public void StopMusic() {
-        music.Stop();
+        music.Pause();
     }
 
     public void PlayMusic() {
+        music.Stop();
         music.Play();
+    }
+    public void ResumeMusic() {
+        music.UnPause();
     }
 
     public void Jump() {
         sfx.PlayOneShot(jumping);
+    }
+
+    public void GameOver() {
+        sfx.PlayOneShot(gameover);
+    }
+
+    public void PlayExplosion() {
+        sfx.PlayOneShot(explosion);
     }
 }
