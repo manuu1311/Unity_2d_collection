@@ -6,6 +6,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip jumping;
     public AudioClip starSound1;
     public AudioClip starSound2;
+    public AudioClip fishpickup;
+    public AudioClip firstsplash;
+    public AudioClip secondsplash;
+
     public AudioClip gameover;
     public AudioClip explosion;
     public AudioSource sfx;
@@ -43,5 +47,14 @@ public class SoundManager : MonoBehaviour
 
     public void PlayExplosion() {
         sfx.PlayOneShot(explosion);
+    }
+    public void FishPickUp() {
+        sfx.PlayOneShot(fishpickup);
+    }
+    public void FirstSplash() {
+        sfx.PlayOneShot(firstsplash);
+    }
+    public void SecondSplash() {
+        sfx.PlayOneShot(secondsplash);
     }
 }

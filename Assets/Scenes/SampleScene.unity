@@ -5013,6 +5013,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &224460534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 224460535}
+  - component: {fileID: 224460536}
+  m_Layer: 0
+  m_Name: Fish_spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &224460535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224460534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &224460536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224460534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87b316180b9aa3418b584e5bd56a540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pipe_spawner
+  prefabs:
+  - {fileID: 8374404307590120789, guid: 940dfabd7dac1fc4993a43b5b4a24aca, type: 3}
+  tmin: 4
+  tmax: 15
+  prob: 1
+  maxHeight: 0
+  minHeight: 0
 --- !u!1 &364562722
 GameObject:
   m_ObjectHideFlags: 0
@@ -5046,10 +5097,10 @@ MonoBehaviour:
   - {fileID: 66814031995567395, guid: dd167934cabd431458face43dfc950ee, type: 3}
   - {fileID: 6871133330595823451, guid: 56d35f06cc2510b41bfccc4cd793d27f, type: 3}
   tmin: 0.5
-  tmax: 4
+  tmax: 5
   prob: 1
   maxHeight: 2.2
-  minHeight: 3
+  minHeight: 4
 --- !u!4 &364562724
 Transform:
   m_ObjectHideFlags: 0
@@ -5236,7 +5287,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -21}
+  m_AnchoredPosition: {x: 0, y: 41}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &520414162
@@ -5259,7 +5310,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5757,7 +5808,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.692
+  m_Volume: 0.39
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5856,6 +5907,9 @@ MonoBehaviour:
   jumping: {fileID: 8300000, guid: f35af8eb1b730d84c9153bafdbf48987, type: 3}
   starSound1: {fileID: 8300000, guid: e4c4c9a4d0d3d1b4b9fb5efc9d0fb5f8, type: 3}
   starSound2: {fileID: 8300000, guid: 9412b8feceda9b84babccab4d49b8967, type: 3}
+  fishpickup: {fileID: 8300000, guid: e1f7bb96d93f26c40808b6ee6599ad1e, type: 3}
+  firstsplash: {fileID: 8300000, guid: e45c785ea97928a468e8a294674a02c4, type: 3}
+  secondsplash: {fileID: 8300000, guid: dea11ad73d7959849b0126f7480ad294, type: 3}
   gameover: {fileID: 8300000, guid: e4b2a82b7418e93479f3fce7a1d68d8e, type: 3}
   explosion: {fileID: 8300000, guid: f1fa3ae89bfd63449b3b4333993d7bc0, type: 3}
   sfx: {fileID: 941643675}
@@ -6188,7 +6242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -21}
+  m_AnchoredPosition: {x: 0, y: 41}
   m_SizeDelta: {x: 101, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1269428721
@@ -6211,8 +6265,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
@@ -6264,7 +6318,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 10, y: 51}
+  m_AnchoredPosition: {x: 0, y: 74}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1333600748
@@ -6397,6 +6451,7 @@ MonoBehaviour:
   soundManager: {fileID: 941643676}
   homeButton: {fileID: 866050629}
   explosion: {fileID: 140479981}
+  healthbar: {fileID: 520414162}
 --- !u!4 &1625064720
 Transform:
   m_ObjectHideFlags: 0
@@ -6820,6 +6875,7 @@ MonoBehaviour:
   pause: {fileID: 3228520259634263441, guid: e7acd75f5716b62488c1047deff12f3a, type: 3}
   soundManager: {fileID: 941643676}
   gameManager: {fileID: 1625064719}
+  helathdecay: 0.035
 --- !u!114 &1803580042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7124,6 +7180,7 @@ SceneRoots:
   - {fileID: 1642309751}
   - {fileID: 1876427660}
   - {fileID: 364562724}
+  - {fileID: 224460535}
   - {fileID: 1625064720}
   - {fileID: 2117990772}
   - {fileID: 622697145}

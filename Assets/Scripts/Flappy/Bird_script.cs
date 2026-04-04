@@ -100,13 +100,17 @@ public class Bird_script : MonoBehaviour
         {
             float rew=collision.gameObject.GetComponent<Score_rew>().rew;
             FindAnyObjectByType<GameManager>().IncreaseScore(rew);
-            if (rew > 1) {
+            if (rew < 2f) {
                 Heal(0.05f);
                 soundManager.StarPickup2();   
             }
-            else {
+            else if(rew<4f){
+                soundManager.StarPickup1(); 
                 Heal(0.15f);
-                soundManager.StarPickup1();   
+            }
+            else {
+                soundManager.FishPickUp();
+                Heal(1f);
             }
             Destroy(collision.gameObject);
         }

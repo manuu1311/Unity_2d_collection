@@ -28,11 +28,10 @@ public class Pipe_spawner : MonoBehaviour
     {
         while (true)
         {
-            Spawn();
-
             // random delay between spawns
             float tPrime = UnityEngine.Random.Range(tmin, tmax);
             yield return new WaitForSeconds(tPrime);
+            Spawn();
         }
     }
     private void Spawn()
