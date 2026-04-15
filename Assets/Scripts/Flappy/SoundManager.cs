@@ -12,6 +12,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip gameover;
     public AudioClip explosion;
+    public AudioClip fadeEffect;
     public AudioSource sfx;
     public AudioSource music;
 
@@ -56,5 +57,8 @@ public class SoundManager : MonoBehaviour
     }
     public void SecondSplash() {
         sfx.PlayOneShot(secondsplash);
+    }
+    public void FadeEffect() {
+        sfx.PlayOneShot(fadeEffect);
     }
 }

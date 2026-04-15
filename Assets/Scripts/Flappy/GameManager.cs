@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0.4f);
         bird.Fade();
+        //soundManager.FadeEffect();
         yield return new WaitForSecondsRealtime(0.4f);
         bird.gameObject.SetActive(false);
         ExplodePlayer();
