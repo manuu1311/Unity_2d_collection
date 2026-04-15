@@ -30,6 +30,7 @@ public class Bird_script : MonoBehaviour
     private SpriteRenderer rend;
     private Coroutine fadeCoroutine;
     public AnimationCurve scaleCurve;
+    public Animator animator;
     void Awake()
     {
         rend=gameObject.GetComponent<SpriteRenderer>();
@@ -37,7 +38,9 @@ public class Bird_script : MonoBehaviour
         rend.material = material;
         rightWing = transform.Find("birdwingright").GetComponent<SpriteRenderer>();
         leftWing = transform.Find("birdwingleft").GetComponent<SpriteRenderer>();
+        gameObject.GetComponent<Rigidbody2D>().simulated=true;
         ResetBird();
+        animator.enabled=false;
     }
 
     private void OnEnable()
@@ -199,7 +202,6 @@ public class Bird_script : MonoBehaviour
 
         while (t < duration)
         {
-            Debug.Log("Coroutine running on: " + gameObject.name);
             t += Time.unscaledDeltaTime;
 
             float normalized = Mathf.Clamp01(t / duration);
