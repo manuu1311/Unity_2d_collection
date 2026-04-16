@@ -13,6 +13,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip gameover;
     public AudioClip explosion;
     public AudioClip fadeEffect;
+    public AudioClip warp;
+    public AudioClip warpreload;
+    public AudioClip warpcharged;
     public AudioSource sfx;
     public AudioSource music;
 
@@ -60,5 +63,14 @@ public class SoundManager : MonoBehaviour
     }
     public void FadeEffect() {
         sfx.PlayOneShot(fadeEffect);
+    }
+    public void Warp() {
+        sfx.PlayOneShot(warp);
+    }
+    public void WarpReload() {
+        sfx.PlayOneShot(warpreload);
+    }
+    public void WarpCharged() {
+        sfx.PlayOneShot(warpcharged);
     }
 }

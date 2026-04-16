@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
-    public float speed=5;
     private float yfirst;
     private float ylast;
     private float height;
@@ -43,7 +42,7 @@ public class Fish : MonoBehaviour
     {
         if (active) {
             Vector3 pos3=transform.position;
-            pos3.x-=(speed-xspeed)*Time.deltaTime;
+            pos3.x-=(GameManager.objSpeed-xspeed)*Time.deltaTime;
             yvelocity-=9.8f*Time.deltaTime;
             pos3.y+=yvelocity*Time.deltaTime;
             transform.position=pos3;
@@ -61,7 +60,7 @@ public class Fish : MonoBehaviour
         }
         else {
             Vector3 pos3=transform.position;
-            pos3.x-=(speed-xspeed)*Time.deltaTime;
+            pos3.x-=(GameManager.objSpeed-xspeed)*Time.deltaTime;
             transform.position=pos3;
         }
     }

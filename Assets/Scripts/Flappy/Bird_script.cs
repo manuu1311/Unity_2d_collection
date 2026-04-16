@@ -13,6 +13,7 @@ public class Bird_script : MonoBehaviour
     public float Flap_str=5f;
     public InputActionReference jump;
     public InputActionReference pause;
+    public InputActionReference warp;
     private WaitForSeconds flapDelay = new WaitForSeconds(0.4f);
     public SoundManager soundManager;
     public GameManager gameManager;
@@ -24,14 +25,16 @@ public class Bird_script : MonoBehaviour
     //lerp time to reach final size, health size scale
     public float healthWarpTime;
     public bool active=true;
-    public float fadeTimeDeath;
-    public float fadeTimeSpawn;
     private Material material;
     private SpriteRenderer rend;
     private Coroutine fadeCoroutine;
     public AnimationCurve scaleCurve;
     public Animator animator;
     public float cloudScale;
+    private bool canWarp = true;
+    private Coroutine warper;
+    public float warpCooldown = 10f;
+
     void Awake()
     {
         rend=gameObject.GetComponent<SpriteRenderer>();
@@ -51,6 +54,9 @@ public class Bird_script : MonoBehaviour
         jump.action.Enable();
         pause.action.performed += OnPause;
         pause.action.Enable();
+        warp.action.performed += OnWarp;
+        warp.action.Enable();
+        
     }
 
     private void OnDisable()
@@ -58,6 +64,10 @@ public class Bird_script : MonoBehaviour
         // Unsubscribe to prevent memory leaks
         jump.action.performed -= OnJump;
         jump.action.Disable();
+        pause.action.performed -= OnPause;
+        pause.action.Disable();
+        warp.action.performed -=OnWarp;
+        warp.action.Disable();
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -86,6 +96,26 @@ public class Bird_script : MonoBehaviour
             }
         }
     }
+
+    public void OnWarp(InputAction.CallbackContext context) {
+        if(context.performed){
+            if (!canWarp) {
+                soundManager.WarpReload();
+                return;
+            }
+
+        warper=StartCoroutine(WarpCooldown());
+        Debug.Log("warping!!");
+        gameManager.Warp();
+        }
+}
+
+private IEnumerator WarpCooldown() {
+    canWarp = false;
+    yield return new WaitForSeconds(10f);
+    soundManager.WarpCharged();
+    canWarp = true;
+}
 
     void SpawnCloud() {
         Vector3 spawnPos = transform.position + new Vector3(0, 0, 1f);
@@ -169,6 +199,10 @@ public class Bird_script : MonoBehaviour
         pos.y=-1.5f;
         transform.position=pos;
         rigidBody.linearVelocity = new Vector2(0, 0);
+        if (warper != null) {
+            StopCoroutine(warper);
+        }
+        canWarp=true;
     }
 
     public float GetHealth() {
@@ -180,15 +214,15 @@ public class Bird_script : MonoBehaviour
         health=math.min(health,1f);
     }
 
-    public void Fade() {
+    public void Fade(float duration) {
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
-        fadeCoroutine = StartCoroutine(Fader(-1,fadeTimeDeath));
+        fadeCoroutine = StartCoroutine(Fader(-1,duration));
     }
-    public void FadeSpawn() {
+    public void FadeSpawn(float duration) {
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
-        fadeCoroutine = StartCoroutine(Fader(1,fadeTimeSpawn));
+        fadeCoroutine = StartCoroutine(Fader(1,duration));
     }
     IEnumerator Fader(int sign, float duration) {
         // sign: 1 = fade 0 -> 1

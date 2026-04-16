@@ -4,7 +4,6 @@ using System.Collections;
 public class CloudFade : MonoBehaviour
 {
     public float fadeDuration = 1.5f; // how long the fade lasts
-    public float speed=6f;
     public bool active=true;
 
     private SpriteRenderer sr;
@@ -33,7 +32,7 @@ public class CloudFade : MonoBehaviour
     void Update() {
         if(active){
             Vector3 pos=transform.position;
-            pos.x-=speed*Time.deltaTime;
+            pos.x-=GameManager.jumpCloudSpeed*Time.deltaTime;
             pos.y+=0.5f*Time.deltaTime;
             transform.position=pos;
     }

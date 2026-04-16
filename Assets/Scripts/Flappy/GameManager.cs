@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.IO.Pipes;
 using Unity.VisualScripting;
+using UnityEngine.InputSystem.Utilities;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
     //flag to see if this is the very beginning (for respawn)
     private bool firstSpawn;
     //speed of items
-    public static float pipeSpeed=5f;
+    public static float objSpeed=5f;
     public static float jumpCloudSpeed=6f;
     public static float backgroundSpeed=0.02f;
     public ParticleSystem fireworks;
@@ -28,6 +29,12 @@ public class GameManager : MonoBehaviour
     public Pipe_spawner pipeSpawner;
     public Pipe_spawner shellSpawner;
     public Pipe_spawner fishSpawner;
+    public float warpFadeDuration;
+    public float warpDuration;
+    public float fadeTimeDeath=0.4f;
+    public float fadeTimeSpawn=1f;
+    public float warpFadeTimeSpawn=0.2f;
+    public float warpFadeTimeDeath=0.2f;
 
     private void Awake()
     {
@@ -75,7 +82,7 @@ public class GameManager : MonoBehaviour
     IEnumerator GameOverSequence()
     {
         yield return new WaitForSecondsRealtime(0.4f);
-        bird.Fade();
+        bird.Fade(fadeTimeDeath);
         //soundManager.FadeEffect();
         yield return new WaitForSecondsRealtime(0.4f);
         bird.gameObject.SetActive(false);
@@ -98,7 +105,7 @@ public class GameManager : MonoBehaviour
         homeButton.SetActive(false);
         bird.gameObject.SetActive(true);
         if (!firstSpawn) {
-            bird.FadeSpawn();
+            bird.FadeSpawn(fadeTimeSpawn);
         }
         Score=0;
         score.text=Score.ToString();
@@ -120,6 +127,10 @@ public class GameManager : MonoBehaviour
 
     void Update() {
         healthbar.fillAmount=bird.GetHealth();
+    }
+
+    public void Warp() {
+        StartCoroutine(WarpSequence(warpFadeDuration,warpDuration));
     }
 
     private void DestroyEnv() {
@@ -152,14 +163,13 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(15);
         //fade bird and spawn it in default coordinates
-        bird.fadeTimeDeath=0.5f;
-        bird.Fade();
-        yield return new WaitForSeconds(1);
+        bird.Fade(fadeTimeDeath);
         bird.paused=true;
         bird.rigidBody.simulated=false;
+        yield return new WaitForSeconds(2);
         bird.ResetBird();
         bird.transform.localScale=new Vector3(0.04f,0.04f,1f);
-        bird.FadeSpawn();
+        bird.FadeSpawn(fadeTimeSpawn);
         yield return new WaitForSeconds(1);
         StartCoroutine(AnimationSpeedDecreaser(2f));
         fishSpawner.enabled=true;
@@ -185,5 +195,55 @@ public class GameManager : MonoBehaviour
         }
 
         backgroundSpeed=0f;
+    }
+    IEnumerator WarpSequence(float fadeDuration, float warpDuration) {
+        float mult=1.5f;
+        float originalbg=backgroundSpeed;
+        float originalobj=objSpeed;
+        float startbg=0.02f;
+        float endbg=startbg*mult;
+        float startobj=5f;
+        float endobj=startobj*mult;
+        float t = 0f;
+        //disable bird actions and gravity
+        bird.paused=true;
+        bird.rigidBody.linearVelocity=Vector2.zero;
+        bird.rigidBody.simulated=false;
+        bird.Fade(warpFadeTimeDeath);
+        yield return new WaitForSeconds(warpFadeTimeDeath/2);
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+
+            float normalized = Mathf.Clamp01(t / fadeDuration);
+            float valuebg = Mathf.Lerp(startbg, endbg, normalized);
+            backgroundSpeed=valuebg;
+            float valueobj = Mathf.Lerp(startobj, endobj, normalized);
+            objSpeed=valueobj;
+            yield return new WaitForEndOfFrame();
+        }
+        soundManager.Warp();
+        yield return new WaitForSeconds(warpDuration);
+        t=0f;
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+
+            float normalized = Mathf.Clamp01(t / fadeDuration);
+            float valuebg = Mathf.Lerp(endbg,startbg, normalized);
+            backgroundSpeed=valuebg;
+            float valueobj = Mathf.Lerp(endobj,startobj, normalized);
+            objSpeed=valueobj;
+            yield return new WaitForEndOfFrame();
+        }
+
+        backgroundSpeed=originalbg;
+        objSpeed=originalobj;
+        //enable bird actions and gravity
+        bird.paused=false;
+        bird.FadeSpawn(fadeTimeSpawn);
+        //give more time to jump
+        yield return new WaitForSeconds(warpFadeTimeSpawn/2);
+        bird.rigidBody.simulated=true;
     }
 }
