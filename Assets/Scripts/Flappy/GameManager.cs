@@ -139,10 +139,10 @@ public class GameManager : MonoBehaviour
         }
     }
     public void EndGame() {
-        StartCoroutine(GameEndRoutine());
+        StartCoroutine(GameEndSequence());
     }
     //end game sequence
-    IEnumerator GameEndRoutine() {
+    IEnumerator GameEndSequence() {
         //disable all spawners
         pipeSpawner.enabled=false;
         fishSpawner.enabled=false;

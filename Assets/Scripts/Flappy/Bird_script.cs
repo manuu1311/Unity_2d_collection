@@ -31,6 +31,7 @@ public class Bird_script : MonoBehaviour
     private Coroutine fadeCoroutine;
     public AnimationCurve scaleCurve;
     public Animator animator;
+    public float cloudScale;
     void Awake()
     {
         rend=gameObject.GetComponent<SpriteRenderer>();
@@ -88,7 +89,8 @@ public class Bird_script : MonoBehaviour
 
     void SpawnCloud() {
         Vector3 spawnPos = transform.position + new Vector3(0, 0, 1f);
-    Instantiate(cloudPrefab, spawnPos, Quaternion.Euler(0, 0, 180));
+        GameObject cloud= Instantiate(cloudPrefab, spawnPos, Quaternion.Euler(0, 0, 180));
+        cloud.transform.localScale = transform.localScale*cloudScale;
     }
     void Flap() {
         StartCoroutine(FlapRoutine());
@@ -127,7 +129,7 @@ public class Bird_script : MonoBehaviour
             }
             else {
                 soundManager.FishPickUp();
-                Heal(1f);
+                Heal(0.35f);
             }
             Destroy(collision.gameObject);
         }
